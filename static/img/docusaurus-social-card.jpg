@@ -1,0 +1,9 @@
+<svg width="1024" height="512" viewBox="0 0 1024 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1024" height="512" fill="#2e8555"/>
+  <text x="512" y="256" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="48">
+    AI Robotics Textbook
+  </text>
+  <text x="512" y="320" text-anchor="middle" dominant-baseline="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="24">
+    Physical AI &amp; Humanoid Robotics
+  </text>
+</svg>

@@ -1,0 +1,174 @@
+/**
+ * CSS module for the home page
+ */
+
+.heroBanner {
+  padding: 4rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+  color: white;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 2rem 0;
+  }
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .buttons .button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.sectionTitle {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-primary);
+  font-weight: 700;
+}
+
+.sectionSubtitle {
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--ifm-color-secondary);
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  line-height: 1.6;
+}
+
+.modulesSection {
+  padding: 4rem 0;
+  background-color: var(--ifm-color-emphasis-0);
+}
+
+.featuresSection {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.card {
+  height: 100%;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card__header h3 {
+  margin-bottom: 0.5rem;
+}
+
+.card__body ul {
+  margin-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.card__body ul li {
+  margin-bottom: 0.5rem;
+}
+
+.card__footer {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.module-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.module-badge--ros2 {
+  background-color: #4a5568;
+  color: white;
+}
+
+.module-badge--gazebo {
+  background-color: #2d3748;
+  color: white;
+}
+
+.module-badge--isaac {
+  background-color: #1a202c;
+  color: white;
+}
+
+.module-badge--vla {
+  background-color: #718096;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 996px) {
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+  }
+
+  .col--6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Additional styling for better visual hierarchy */
+.hero__title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hero__subtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+/* Enhanced card styling for features section */
+.featuresSection .card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.featuresSection .card h3 {
+  color: var(--ifm-color-primary);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}

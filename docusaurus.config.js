@@ -11,13 +11,13 @@ const config = {
   favicon: 'img/ai.ico',
 
   // Set the production url of your site here
-  url: 'https://physical-humanoid-ai-book.vercel.app',
+  url: 'https://your-vercel-project-url.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For Vercel deployment, use '/' for root
   baseUrl: '/',
 
   // For proper URL handling on Vercel
-  trailingSlash: undefined,
+  trailingSlash: false,
 
   // GitHub pages deployment config.
   organizationName: 'alizah-fatima', // Usually your GitHub org/user name.

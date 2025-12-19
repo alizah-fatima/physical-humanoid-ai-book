@@ -11,7 +11,7 @@ const config = {
   favicon: 'img/ai.ico',
 
   // Set the production url of your site here
-  url: 'https://physical-humanoid-ai-book.vercel.app',
+  url: 'https://physical-humanoid-ai-book-oi3595z3h-alizah-fatimas-projects.vercel.app',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For Vercel deployment, use '/' for root
   baseUrl: '/',

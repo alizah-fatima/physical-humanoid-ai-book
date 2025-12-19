@@ -13,8 +13,8 @@ const config = {
   // Set the production url of your site here
   url: 'https://alizah-fatima.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/physical-humanoid-ai-book',
+  // For Vercel deployment, use '/' for root, or '/physical-humanoid-ai-book' for GitHub Pages
+  baseUrl: '/',
 
   // GitHub pages deployment config.
   organizationName: 'alizah-fatima', // Usually your GitHub org/user name.
@@ -43,7 +43,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/alizah-fatima/physical-humanoid-ai-book/tree/main/',
         },
         blog: false, // Disable blog plugin as we're creating a textbook
         theme: {

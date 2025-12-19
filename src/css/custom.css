@@ -147,7 +147,16 @@ pre {
 .footer {
   background-color: var(--ifm-color-emphasis-0);
   border-top: 1px solid var(--ifm-color-emphasis-200);
-  color: var(--ifm-color-emphasis-900);
+  color: #000000; /* Ensure black text in light theme */
+}
+
+/* Ensure footer links are also visible */
+.footer a {
+  color: #000000 !important; /* Force black links in light theme */
+}
+
+.footer a:hover {
+  color: #333333 !important; /* Slightly darker on hover */
 }
 
 /* Center footer content */

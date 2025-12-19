@@ -8,7 +8,7 @@ const darkCodeTheme = require('prism-react-renderer').themes.dracula;
 const config = {
   title: 'Physical AI & Humanoid Robotics Course',
   tagline: 'AI Systems in the Physical World. Bridging the gap between the digital brain and the physical body. Students apply their AI knowledge to control Humanoid Robots in simulated and real-world environments.',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/ai.ico',
 
   // Set the production url of your site here
   url: 'https://alizah-fatima.github.io',
@@ -57,7 +57,7 @@ const config = {
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // Replace with your project's social card
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/logo.svg',
       navbar: {
         title: 'Physical AI & Humanoid Robotics',
         logo: {
@@ -72,7 +72,7 @@ const config = {
             label: 'Textbook',
           },
           {
-            href: 'https://github.com/your-username/physical-humanoid-ai-book',
+            href: 'https://github.com/alizah-fatima/physical-humanoid-ai-book',
             label: 'GitHub',
             position: 'right',
           },
@@ -82,42 +82,50 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Content',
+            title: 'Learn',
             items: [
               {
                 label: 'Introduction',
                 to: '/docs/intro',
               },
+              {
+                label: 'ROS 2 Fundamentals',
+                to: '/docs/module1-ros2/chapter1-architecture',
+              },
+              {
+                label: 'Digital Twin',
+                to: '/docs/module2-digital-twin/chapter1-gazebo-intro',
+              },
             ],
           },
           {
-            title: 'Community',
+            title: 'Resources',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'AI & Robotics Guide',
+                to: '/docs/module3-nvidia-isaac/chapter1-isaac-sim-intro',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                label: 'Vision-Language-Action',
+                to: '/docs/module4-vla/chapter1-vla-intro',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Connect',
             items: [
               {
                 label: 'GitHub',
-                href: 'https://github.com/your-username/physical-humanoid-ai-book',
+                href: 'https://github.com/alizah-fatima',
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/alizah-fatima008/',
               },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} AI-driven Textbook on Physical AI & Humanoid Robotics. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Physical AI & Humanoid Robotics Book.`,
       },
       prism: {
         theme: lightCodeTheme,

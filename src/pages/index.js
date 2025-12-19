@@ -18,7 +18,7 @@ function HomepageHeader() {
             <Link
               className="button button--primary button--lg"
               to="/docs/intro">
-              Start Learning
+              Start Learning!
             </Link>
           </div>
         </div>
@@ -44,7 +44,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="row" style={{marginTop: '2rem', gap: '1.5rem'}}>
+            <div className="row" style={{marginTop: '2rem', gap: '1.5rem', justifyContent: 'center'}}>
               <div className="col col--6">
                 <div className="card">
                   <div className="card__header">
@@ -98,7 +98,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="row" style={{marginTop: '1.5rem', gap: '1.5rem'}}>
+            <div className="row" style={{marginTop: '1.5rem', gap: '1.5rem', justifyContent: 'center'}}>
               <div className="col col--6">
                 <div className="card">
                   <div className="card__header">
@@ -161,7 +161,7 @@ export default function Home() {
                 <h2 className={styles.sectionTitle}>Why Learn With Us?</h2>
               </div>
             </div>
-            <div className="row" style={{marginTop: '2rem', gap: '1.5rem'}}>
+            <div className="row" style={{marginTop: '2rem', gap: '1.5rem', justifyContent: 'center'}}>
               <div className="col col--3">
                 <div className="card text--center">
                   <div className="card__body">
@@ -183,14 +183,6 @@ export default function Home() {
                   <div className="card__body">
                     <h3>🤖 Cutting-edge</h3>
                     <p>Latest technologies in AI and robotics</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col col--3">
-                <div className="card text--center">
-                  <div className="card__body">
-                    <h3>🎓 Educational</h3>
-                    <p>Designed for students and professionals</p>
                   </div>
                 </div>
               </div>

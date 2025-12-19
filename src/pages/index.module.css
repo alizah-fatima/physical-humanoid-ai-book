@@ -67,7 +67,17 @@
 
 .featuresSection {
   padding: 4rem 0;
-  background-color: white;
+  background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+  color: white;
+}
+
+.featuresSection .sectionTitle {
+  color: white;
+}
+
+.featuresSection .card {
+  background-color: rgba(255, 255, 255, 0.95);
+  color: var(--ifm-font-color-base);
 }
 
 .card {

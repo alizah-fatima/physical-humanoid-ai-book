@@ -147,6 +147,25 @@ pre {
   border-top: 1px solid var(--ifm-color-emphasis-200);
 }
 
+/* Center footer content */
+.footer__items {
+  text-align: center;
+}
+
+.footer__item {
+  text-align: center;
+}
+
+.footer__links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer__col {
+  text-align: center;
+}
+
 /* Enhanced markdown content */
 .markdown h1,
 .markdown h2,

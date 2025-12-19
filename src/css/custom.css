@@ -25,6 +25,7 @@
   --ifm-card-border-radius: 12px;
   --ifm-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --ifm-card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  --ifm-card-text-color: #1a202c; /* Dark text for light cards */
 
   /* Spacing improvements */
   --ifm-spacing-horizontal: 1.5rem;
@@ -80,6 +81,7 @@
   transition: all 0.3s ease;
   border-radius: var(--ifm-card-border-radius);
   overflow: hidden;
+  color: var(--ifm-card-text-color);
 }
 
 .card:hover {
@@ -145,6 +147,7 @@ pre {
 .footer {
   background-color: var(--ifm-color-emphasis-0);
   border-top: 1px solid var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-900);
 }
 
 /* Center footer content */

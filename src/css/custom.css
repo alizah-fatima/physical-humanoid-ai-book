@@ -25,7 +25,6 @@
   --ifm-card-border-radius: 12px;
   --ifm-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --ifm-card-hover-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  --ifm-card-text-color: #1a202c; /* Dark text for light cards */
 
   /* Spacing improvements */
   --ifm-spacing-horizontal: 1.5rem;
@@ -81,7 +80,6 @@
   transition: all 0.3s ease;
   border-radius: var(--ifm-card-border-radius);
   overflow: hidden;
-  color: var(--ifm-card-text-color);
 }
 
 .card:hover {
@@ -147,16 +145,6 @@ pre {
 .footer {
   background-color: var(--ifm-color-emphasis-0);
   border-top: 1px solid var(--ifm-color-emphasis-200);
-  color: #000000; /* Ensure black text in light theme */
-}
-
-/* Ensure footer links are also visible */
-.footer a {
-  color: #000000 !important; /* Force black links in light theme */
-}
-
-.footer a:hover {
-  color: #333333 !important; /* Slightly darker on hover */
 }
 
 /* Center footer content */
@@ -349,4 +337,39 @@ pre {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Theme-specific text colors for better visibility */
+/* Light theme: dark text on light backgrounds */
+:root .card {
+  color: #1a202c; /* Dark text for light theme cards */
+}
+
+:root .footer {
+  color: #1a202c; /* Dark text for light theme footer */
+}
+
+:root .footer a {
+  color: #2d3748 !important; /* Dark links for light theme footer */
+}
+
+:root .footer a:hover {
+  color: #1a202c !important; /* Darker on hover for light theme */
+}
+
+/* Dark theme: light text on dark backgrounds */
+[data-theme='dark'] .card {
+  color: #e2e8f0; /* Light text for dark theme cards */
+}
+
+[data-theme='dark'] .footer {
+  color: #e2e8f0; /* Light text for dark theme footer */
+}
+
+[data-theme='dark'] .footer a {
+  color: #cbd5e0 !important; /* Light links for dark theme footer */
+}
+
+[data-theme='dark'] .footer a:hover {
+  color: #f7fafc !important; /* Lighter on hover for dark theme */
 }

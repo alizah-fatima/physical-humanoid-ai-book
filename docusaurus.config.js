@@ -17,7 +17,7 @@ const config = {
   baseUrl: '/physical-humanoid-ai-book/',
 
   // For proper URL handling on GitHub Pages
-  trailingSlash: undefined,
+  trailingSlash: true,
 
   // GitHub pages deployment config.
   organizationName: 'alizah-fatima', // Usually your GitHub org/user name.

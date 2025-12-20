@@ -14,7 +14,7 @@ const config = {
   url: 'https://alizah-fatima.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub Pages deployment, use '/<project-name>/'
-  baseUrl: '/',
+  baseUrl: '/physical-humanoid-ai-book/',
 
   // For proper URL handling on GitHub Pages
   trailingSlash: true,

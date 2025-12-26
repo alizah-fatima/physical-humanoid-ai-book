@@ -1,12 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { useColorMode } from '@docusaurus/theme-common';
 
 const AIChatbot = () => {
-  const { colorMode } = useColorMode();
+  const [colorMode, setColorMode] = useState('light'); // Default to light mode
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Get color mode from document class or default to light
+  useEffect(() => {
+    const updateColorMode = () => {
+      const isDarkMode = document.documentElement.classList.contains('dark') ||
+        (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      setColorMode(isDarkMode ? 'dark' : 'light');
+    };
+
+    // Initial check
+    updateColorMode();
+
+    // Listen for changes to dark mode preference
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => updateColorMode();
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    // Also check for Docusaurus theme changes by monitoring class changes
+    const observer = new MutationObserver(updateColorMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+      observer.disconnect();
+    };
+  }, []);
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
@@ -20,16 +49,43 @@ const AIChatbot = () => {
     setInputValue('');
     setIsLoading(true);
 
-    // In a real implementation, this would connect to your RAG system
-    // For now, we'll simulate a response based on the textbook content
-    setTimeout(() => {
+    try {
+      // Call the backend API
+      const response = await fetch('http://localhost:8000/api/v1/agent/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: inputValue,
+          selectedText: '', // No selected text in this basic version
+          topK: 5
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Create bot response
       const botResponse = {
         role: 'assistant',
-        content: `I've searched the textbook content and found relevant information about "${inputValue}". In a full implementation, this would connect to our RAG system to provide precise answers from the Physical AI & Humanoid Robotics textbook.`
+        content: data.response
       };
+
       setMessages(prev => [...prev, botResponse]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorMessage = {
+        role: 'assistant',
+        content: `Sorry, I encountered an error processing your request: ${error.message}. Please try again.`
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -118,7 +174,7 @@ const AIChatbot = () => {
           width: 60px;
           height: 60px;
           border-radius: 50%;
-          background-color: var(--ifm-color-primary);
+          background-color: rgba(37, 193, 189, 0.6);
           color: white;
           border: none;
           cursor: pointer;
@@ -137,17 +193,17 @@ const AIChatbot = () => {
         .chatbot-window {
           width: 350px;
           height: 500px;
-          background-color: ${colorMode === 'dark' ? '#242526' : 'white'};
+          background-color: ${colorMode === 'dark' ? '#1a1a1a' : 'white'};
           border-radius: 12px;
           display: flex;
           flex-direction: column;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
           overflow: hidden;
-          border: 1px solid ${colorMode === 'dark' ? '#444' : '#ddd'};
+          border: 1px solid ${colorMode === 'dark' ? '#555' : '#ddd'};
         }
 
         .chatbot-header {
-          background-color: var(--ifm-color-primary);
+          background-color: rgba(37, 193, 189, 0.6);
           color: white;
           padding: 15px;
           display: flex;
@@ -175,11 +231,11 @@ const AIChatbot = () => {
           display: flex;
           flex-direction: column;
           gap: 12px;
-          background-color: ${colorMode === 'dark' ? '#2d2d2d' : '#fafafa'};
+          background-color: ${colorMode === 'dark' ? '#121212' : '#fafafa'};
         }
 
         .welcome-message {
-          color: ${colorMode === 'dark' ? '#aaa' : '#666'};
+          color: ${colorMode === 'dark' ? '#cccccc' : '#666'};
           font-style: italic;
         }
 
@@ -192,15 +248,15 @@ const AIChatbot = () => {
 
         .message.user {
           align-self: flex-end;
-          background-color: var(--ifm-color-primary);
+          background-color: rgba(37, 193, 189, 0.6);
           color: white;
           border-bottom-right-radius: 4px;
         }
 
         .message.assistant {
           align-self: flex-start;
-          background-color: ${colorMode === 'dark' ? '#3a3a3a' : '#e9ecef'};
-          color: ${colorMode === 'dark' ? '#fff' : '#333'};
+          background-color: ${colorMode === 'dark' ? '#2a2a2a' : '#e9ecef'};
+          color: ${colorMode === 'dark' ? '#ffffff' : '#333'};
           border-bottom-left-radius: 4px;
         }
 
@@ -212,7 +268,7 @@ const AIChatbot = () => {
         .typing-indicator span {
           width: 8px;
           height: 8px;
-          background-color: ${colorMode === 'dark' ? '#aaa' : '#666'};
+          background-color: ${colorMode === 'dark' ? '#cccccc' : '#666'};
           border-radius: 50%;
           margin: 0 2px;
           animation: typing 1.4s infinite ease-in-out;
@@ -241,8 +297,8 @@ const AIChatbot = () => {
 
         .chatbot-input {
           padding: 15px;
-          background-color: ${colorMode === 'dark' ? '#242526' : 'white'};
-          border-top: 1px solid ${colorMode === 'dark' ? '#444' : '#ddd'};
+          background-color: ${colorMode === 'dark' ? '#1a1a1a' : 'white'};
+          border-top: 1px solid ${colorMode === 'dark' ? '#555' : '#ddd'};
           display: flex;
           gap: 8px;
         }
@@ -250,11 +306,11 @@ const AIChatbot = () => {
         .chatbot-input input {
           flex: 1;
           padding: 12px 15px;
-          border: 1px solid ${colorMode === 'dark' ? '#444' : '#ddd'};
+          border: 1px solid ${colorMode === 'dark' ? '#555' : '#ddd'};
           border-radius: 24px;
           outline: none;
-          background-color: ${colorMode === 'dark' ? '#3a3a3a' : 'white'};
-          color: ${colorMode === 'dark' ? 'white' : 'black'};
+          background-color: ${colorMode === 'dark' ? '#2a2a2a' : 'white'};
+          color: ${colorMode === 'dark' ? '#ffffff' : 'black'};
         }
 
         .chatbot-input input:focus {

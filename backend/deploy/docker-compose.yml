@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  rag-agent-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
+      - QDRANT_HOST=${QDRANT_HOST:-qdrant}
+      - QDRANT_PORT=${QDRANT_PORT:-6333}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4-turbo}
+      - RETRIEVAL_TOP_K=${RETRIEVAL_TOP_K:-5}
+      - AGENT_TEMPERATURE=${AGENT_TEMPERATURE:-0.3}
+    depends_on:
+      - qdrant
+    networks:
+      - rag-network
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+    networks:
+      - rag-network
+
+volumes:
+  qdrant_data:
+
+networks:
+  rag-network:
+    driver: bridge

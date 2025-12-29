@@ -1,18 +1,13 @@
 """
-RAG Agent Implementation using OpenAI Agents SDK
-
-This module implements an AI agent that uses the OpenAI Agents SDK to process user queries
-and integrates with the existing Qdrant retrieval system to provide responses based solely on book content.
+RAG Agent Implementation using OpenAI API
 """
 import os
 import logging
 import json
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from agents import Agent, Runner, function_tool
 from pydantic import BaseModel
-from agents import OpenAIChatCompletionsModel
-from openai import AsyncOpenAI
+from openai import OpenAI
 import sys
 import os
 # Add the backend directory to the path to resolve imports
@@ -28,18 +23,6 @@ from services.citation_service import CitationService
 
 logger = get_logger()
 
-ROUTER_API_KEY = "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"
-
-client = AsyncOpenAI(
-    api_key=ROUTER_API_KEY,
-    base_url= "https://openrouter.ai/api/v1" 
-)
-
-router_model = OpenAIChatCompletionsModel(
-    openai_client=client,
-    model="mistralai/devstral-2512:free"
-)
-
 class RetrievedChunk(BaseModel):
     """
     Model for a single retrieved chunk
@@ -51,7 +34,6 @@ class RetrievedChunk(BaseModel):
     confidence: Optional[float] = None
 
 
-@function_tool
 def retrieve_book_content(query: str, top_k: int = 5) -> List[Dict[str, Any]]:
     """
     Retrieve relevant book content from the Qdrant database based on the query.
@@ -83,12 +65,12 @@ def retrieve_book_content(query: str, top_k: int = 5) -> List[Dict[str, Any]]:
 
 class RAGAgent:
     """
-    RAG Agent that integrates OpenAI Agents SDK with Qdrant retrieval system.
+    RAG Agent that integrates OpenAI API with Qdrant retrieval system.
     """
 
     def __init__(self):
         """
-        Initialize the RAG Agent with OpenAI Agents SDK and configuration.
+        Initialize the RAG Agent with OpenAI API and configuration.
         """
         # Validate configuration
         AgentConfig.validate()
@@ -98,22 +80,10 @@ class RAGAgent:
         self.top_k = AgentConfig.RETRIEVAL_TOP_K
         self.temperature = AgentConfig.AGENT_TEMPERATURE
 
-        # Create the agent with retrieval tool
-        self.agent = Agent(
-            name="Physical AI & Humanoid Robotics Assistant",
-            instructions="""You are an AI assistant for the Physical AI & Humanoid Robotics textbook. Your responses must be based ONLY on the provided book content. Do not use any external knowledge or make up information. If the provided context doesn't contain enough information to answer the question, clearly state that the information is not available in the provided content.
+        # Initialize OpenAI client with configured API key
+        self.openai_client = OpenAI(api_key=AgentConfig.OPENAI_API_KEY)
 
-Guidelines:
-1. Answer based solely on the provided context from the retrieve_book_content tool
-2. Cite specific chapters or sections when possible
-3. If uncertain, say you don't have enough information from the provided content
-4. Maintain academic accuracy and clarity
-5. Provide concise, helpful responses""",
-            tools=[retrieve_book_content],
-            model=router_model
-        )
-
-        logger.info("RAG Agent initialized successfully with OpenAI Agents SDK")
+        logger.info("RAG Agent initialized successfully with OpenAI API")
 
     def query_agent(self, user_query: str, selected_text: Optional[str] = None, top_k: Optional[int] = None, temperature: Optional[float] = None) -> Dict[str, Any]:
         """
@@ -137,31 +107,44 @@ Guidelines:
         try:
             logger.info(f"Processing query: '{user_query[:50]}...'")
 
+            # Retrieve context first
+            context_chunks = []
+            try:
+                context_chunks = retrieve_book_content(user_query, local_top_k)
+            except Exception as e:
+                logger.warning(f"Could not retrieve context: {str(e)}")
+
+            # Format context for the LLM
+            context_text = "\n\n".join([chunk['text'] for chunk in context_chunks]) if context_chunks else "No relevant context found in the textbook."
+
             # Add selected text to the query if provided
             if selected_text:
-                full_query = f"{user_query}\n\nAdditional context: {selected_text}"
+                full_query = f"{user_query}\n\nAdditional context: {selected_text}\n\nRelevant textbook content: {context_text}"
             else:
-                full_query = user_query
+                full_query = f"{user_query}\n\nRelevant textbook content: {context_text}"
 
-            # Use the Agents SDK to run the agent
-            result = Runner.run_sync(
-                self.agent,
-                full_query
+            # Create the prompt for the LLM
+            messages = [
+                {
+                    "role": "system",
+                    "content": "You are an AI assistant for the Physical AI & Humanoid Robotics textbook. Your responses must be based ONLY on the provided book content. Do not use any external knowledge or make up information. If the provided context doesn't contain enough information to answer the question, clearly state that the information is not available in the provided content."
+                },
+                {
+                    "role": "user",
+                    "content": full_query
+                }
+            ]
+
+            # Call the OpenAI API
+            response = self.openai_client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=local_temperature,
+                max_tokens=1000
             )
 
             # Extract the response
-            agent_response = result.final_output
-
-            # Extract context used from tool calls
-            context_used = []
-            # Note: In the Agents SDK, we'd need to extract the tool call results
-            # For now, we'll simulate this by running the tool separately to get context
-            try:
-                temp_context = retrieve_book_content(user_query, local_top_k)
-                context_used = temp_context
-            except Exception as e:
-                logger.warning(f"Could not retrieve context for response: {str(e)}")
-                context_used = []
+            agent_response = response.choices[0].message.content
 
             # Calculate execution time
             execution_time_ms = (datetime.now() - start_time).total_seconds() * 1000
@@ -170,7 +153,7 @@ Guidelines:
             result_dict = {
                 "query": user_query,
                 "response": agent_response,
-                "context_used": context_used,
+                "context_used": context_chunks,
                 "thread_id": None,  # Not using threads in this implementation
                 "execution_time_ms": execution_time_ms,
                 "timestamp": datetime.now().isoformat(),
@@ -205,12 +188,10 @@ Guidelines:
             instructions (str): Custom instructions for the assistant (optional)
 
         Returns:
-            str: Assistant ID (though in Agents SDK this is handled differently)
+            str: Assistant ID
         """
-        # In the Agents SDK, assistants are created as Agent objects, not through the API
-        # This method is kept for compatibility but returns a placeholder
         logger.info(f"Agent configured with name: {name}")
-        return "agents-sdk-agent-placeholder-id"
+        return "standard-openai-agent-placeholder-id"
 
 
 def main():
@@ -242,8 +223,7 @@ def main():
         agent = RAGAgent()
 
         if args.setup:
-            # In the Agents SDK, setup is handled automatically when the agent is created
-            print("Agent initialized successfully with OpenAI Agents SDK.")
+            print("Agent initialized successfully with OpenAI API.")
             print("No additional setup required.")
         elif args.query:
             # Process a query

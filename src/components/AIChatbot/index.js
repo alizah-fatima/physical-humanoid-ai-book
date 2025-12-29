@@ -50,8 +50,19 @@ const AIChatbot = () => {
     setIsLoading(true);
 
     try {
-      // Call the backend API
-      const response = await fetch('http://localhost:8000/api/v1/agent/query', {
+      // Determine the API URL based on the environment
+      // For GitHub Pages deployment, you need to deploy the backend separately
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      const apiUrl = isLocalhost
+        ? 'http://localhost:8000/api/v1/agent/query'  // For local development
+        : process.env.REACT_APP_API_URL || 'https://your-deployed-backend.com/api/v1/agent/query'; // For production
+
+      // Check if using default placeholder URL in production
+      if (!isLocalhost && apiUrl.includes('your-deployed-backend')) {
+        throw new Error('Backend API not configured. Please deploy the backend and set REACT_APP_API_URL.');
+      }
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,9 +89,20 @@ const AIChatbot = () => {
       setMessages(prev => [...prev, botResponse]);
     } catch (error) {
       console.error('Error sending message:', error);
+
+      // Provide more helpful error message for common issues
+      let errorMessageContent;
+      if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        errorMessageContent = `I'm unable to connect to the backend service. This could be because:\n\n1. The backend API is not deployed\n2. The backend URL is not configured properly\n3. The backend server is not running\n\nFor GitHub Pages deployment, you need to deploy the backend API separately to a service like Render, Heroku, or AWS, and update the configuration.`;
+      } else if (error.message.includes('backend API not configured')) {
+        errorMessageContent = error.message;
+      } else {
+        errorMessageContent = `Sorry, I encountered an error processing your request: ${error.message}. Please try again.`;
+      }
+
       const errorMessage = {
         role: 'assistant',
-        content: `Sorry, I encountered an error processing your request: ${error.message}. Please try again.`
+        content: errorMessageContent
       };
       setMessages(prev => [...prev, errorMessage]);
     } finally {

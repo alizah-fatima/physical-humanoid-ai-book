@@ -13,8 +13,15 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Go
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from backend.api.endpoints import router as api_router
-from backend.api.docs import customize_openapi
+# Import based on execution context
+try:
+    # Try relative imports first (for when running as part of the package)
+    from .api.endpoints import router as api_router
+    from .api.docs import customize_openapi
+except ImportError:
+    # Fall back to absolute imports (for when running directly)
+    from backend.api.endpoints import router as api_router
+    from backend.api.docs import customize_openapi
 
 # Create the FastAPI application
 app = FastAPI(

@@ -70,20 +70,32 @@ class RAGAgent:
 
     def __init__(self):
         """
-        Initialize the RAG Agent with OpenAI API and configuration.
+        Initialize the RAG Agent with OpenAI API or OpenRouter and configuration.
         """
         # Validate configuration
         AgentConfig.validate()
 
-        # Configuration
-        self.model = AgentConfig.OPENAI_MODEL
+        # Determine which model and API to use based on configuration
+        if AgentConfig.USE_OPENROUTER:
+            self.model = AgentConfig.OPENROUTER_MODEL
+            # Initialize OpenRouter client (uses OpenAI-compatible API)
+            self.client = OpenAI(
+                api_key=AgentConfig.OPENROUTER_API_KEY,
+                base_url="https://openrouter.ai/api/v1",
+                default_headers={
+                    "HTTP-Referer": "http://localhost:3000",
+                    "X-Title": "Physical AI & Humanoid Robotics Assistant"
+                }
+            )
+            logger.info("RAG Agent initialized successfully with OpenRouter API")
+        else:
+            self.model = AgentConfig.OPENAI_MODEL
+            # Initialize OpenAI client with configured API key
+            self.client = OpenAI(api_key=AgentConfig.OPENAI_API_KEY)
+            logger.info("RAG Agent initialized successfully with OpenAI API")
+
         self.top_k = AgentConfig.RETRIEVAL_TOP_K
         self.temperature = AgentConfig.AGENT_TEMPERATURE
-
-        # Initialize OpenAI client with configured API key
-        self.openai_client = OpenAI(api_key=AgentConfig.OPENAI_API_KEY)
-
-        logger.info("RAG Agent initialized successfully with OpenAI API")
 
     def query_agent(self, user_query: str, selected_text: Optional[str] = None, top_k: Optional[int] = None, temperature: Optional[float] = None) -> Dict[str, Any]:
         """
@@ -135,8 +147,8 @@ class RAGAgent:
                 }
             ]
 
-            # Call the OpenAI API
-            response = self.openai_client.chat.completions.create(
+            # Call the API (either OpenAI or OpenRouter)
+            response = self.client.chat.completions.create(
                 model=self.model,
                 messages=messages,
                 temperature=local_temperature,

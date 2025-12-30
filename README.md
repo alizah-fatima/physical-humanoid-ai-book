@@ -101,3 +101,39 @@ Contributions are welcome! Please follow the guidelines outlined in our project 
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
+
+## Hugging Face Space Deployment
+
+This project includes a backend API that can be deployed as a Hugging Face Space. The API provides RAG (Retrieval-Augmented Generation) functionality for the Physical AI & Humanoid Robotics textbook.
+
+### API Endpoints
+
+- `GET /` - Root endpoint
+- `GET /health` - Health check
+- `POST /api/v1/agent/query` - Query endpoint for RAG system
+
+### Environment Variables Required for Hugging Face Space
+
+- `QDRANT_URL` - URL for Qdrant vector database
+- `QDRANT_API_KEY` - API key for Qdrant
+- `COHERE_API_KEY` - API key for embeddings
+- `OPENROUTER_API_KEY` - API key for OpenRouter (or OPENAI_API_KEY)
+- `USE_OPENROUTER` - Set to "true" to use OpenRouter
+- `OPENROUTER_MODEL` - Model to use (e.g., "openai/gpt-4o")
+
+### Integration with GitHub Pages Frontend
+
+The Hugging Face Space backend is designed to work with the GitHub Pages frontend at https://alizah-fatima.github.io/physical-humanoid-ai-book/. The frontend automatically detects the environment and uses the appropriate API URL:
+
+- Local development: `http://localhost:7860/api/v1/agent/query`
+- Production (GitHub Pages): `https://alizah-fatina-physical-robotic-book.hf.space/api/v1/agent/query`
+
+### Deployment
+
+To deploy the backend as a Hugging Face Space:
+
+1. Create a new Space on Hugging Face
+2. Connect to this repository
+3. Set the required environment variables
+4. Use the provided `app.py` and `requirements.txt` files
+5. The Space will automatically run the API server

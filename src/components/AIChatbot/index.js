@@ -54,8 +54,8 @@ const AIChatbot = () => {
       // For GitHub Pages deployment, you need to deploy the backend separately
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiUrl = isLocalhost
-        ? 'http://localhost:8000/api/v1/agent/query'  // For local development
-        : process.env.REACT_APP_API_URL || 'https://your-deployed-backend.com/api/v1/agent/query'; // For production
+        ? 'http://localhost:7860/api/v1/agent/query'  // For local development
+        : process.env.REACT_APP_API_URL || 'https://alizah-fatina-physical-robotic-book.hf.space/api/v1/agent/query'; // For production
 
       // Check if using default placeholder URL in production
       if (!isLocalhost && apiUrl.includes('your-deployed-backend')) {

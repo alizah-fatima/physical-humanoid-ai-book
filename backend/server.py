@@ -1,12 +1,17 @@
 """
-FastAPI Application for RAG Agent API
+Simple API server for RAG Agent
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import sys
+import os
 
-# Import documentation customization
-from .docs import customize_openapi
+# Add the parent directory to the path to import modules
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from backend.api.endpoints import router as api_router
+from backend.api.docs import customize_openapi
 
 # Create the FastAPI application
 app = FastAPI(
@@ -28,10 +33,6 @@ app.add_middleware(
 )
 
 # Import and include API routes with versioning
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from backend.api.endpoints import router as api_router
 app.include_router(api_router, prefix="/api/v1/agent", tags=["agent"])  # API versioning
 
 # Root endpoint
@@ -45,4 +46,4 @@ def health_check():
     return {"status": "healthy", "service": "RAG Agent API"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=7860)

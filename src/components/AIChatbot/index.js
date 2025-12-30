@@ -75,7 +75,11 @@ const AIChatbot = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+        if (response.status === 404) {
+          throw new Error(`Chatbot backend API endpoint not found. The backend may not be properly deployed or the endpoint path may be incorrect. Status: ${response.status}`);
+        } else {
+          throw new Error(`API request failed with status ${response.status}`);
+        }
       }
 
       const data = await response.json();

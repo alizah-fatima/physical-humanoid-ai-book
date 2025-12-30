@@ -16,10 +16,10 @@ backend_dir = os.path.dirname(current_dir)
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
 
-from retrieve import query_qdrant, retrieve_with_metadata
-from config import AgentConfig
-from utils.logging import get_logger
-from services.citation_service import CitationService
+from .retrieve import query_qdrant, retrieve_with_metadata
+from .config import AgentConfig
+from .utils.logging import get_logger
+from .services.citation_service import CitationService
 
 logger = get_logger()
 

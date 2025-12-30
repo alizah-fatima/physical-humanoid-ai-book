@@ -55,11 +55,11 @@ const AIChatbot = () => {
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       const apiUrl = isLocalhost
         ? 'http://localhost:7860/api/v1/agent/query'  // For local development
-        : process.env.REACT_APP_API_URL || 'https://alizah-fatina-physical-robotic-book.hf.space/api/v1/agent/query'; // For production
+        : 'https://alizah-fatina-physical-robotic-book.hf.space/api/v1/agent/query'; // For production (GitHub Pages)
 
-      // Check if using default placeholder URL in production
-      if (!isLocalhost && apiUrl.includes('your-deployed-backend')) {
-        throw new Error('Backend API not configured. Please deploy the backend and set REACT_APP_API_URL.');
+      // Validate the API URL in production
+      if (!isLocalhost && !apiUrl.startsWith('https://')) {
+        throw new Error('Backend API URL must use HTTPS in production.');
       }
 
       const response = await fetch(apiUrl, {
